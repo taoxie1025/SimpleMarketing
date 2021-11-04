@@ -1,0 +1,8 @@
+{
+  "TemplateName": "EmailVerificationTemplate",
+  "FromEmailAddress": "taoxie1025@gmail.com",
+  "TemplateSubject": "Please confirm your email address",
+  "TemplateContent": "<html><head></head><body style='font-family:sans-serif;'><h1 style='text-align:center'>Ready to start using simple marketing?</h1><p>There's just one last step to complete before you can start sending email. Just click the following link to verify your email address. Don't forget to enable your project in dashboard after everything is ready to go.</p></body></html>",
+  "SuccessRedirectionURL": "https://www.thesimplemarketing.com/dashboard",
+  "FailureRedirectionURL": "https://www.thesimplemarketing.com/dashboard"
+}

@@ -1,0 +1,36 @@
+# This is a sample build configuration for Go.
+# Check our guides at https://confluence.atlassian.com/x/5Q4SMw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: golang:1.14
+
+definitions:
+  services:
+    docker:
+      memory: 3072
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build Backend Service & Build Frontend app & Test
+          script:
+            - PACKAGE_PATH="${GOPATH}/src/bitbucket.org/${BITBUCKET_REPO_FULL_NAME}"
+            - mkdir -pv "${PACKAGE_PATH}"
+            - tar -cO --exclude-vcs --exclude=bitbucket-pipelines.yml . | tar -xv -C "${PACKAGE_PATH}"
+            - cd "${PACKAGE_PATH}"
+            - docker build -t email_action  -f Dockerfile.dev .
+            - FRONT_END_APP="${GOPATH}/src/bitbucket.org/${BITBUCKET_REPO_FULL_NAME}/front_end_app"
+            - cd "${FRONT_END_APP}"
+            - docker build -t email_action_app -f Dockerfile .
+            - cd "${PACKAGE_PATH}"
+            - go test -v
+
+            - pipe: atlassian/aws-ecr-push-image:1.1.3
+              variables:
+                IMAGE_NAME: email_action
+
+            - pipe: atlassian/aws-ecr-push-image:1.1.3
+              variables:
+                IMAGE_NAME: email_action_app

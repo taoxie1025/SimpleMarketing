@@ -1,0 +1,20 @@
+FROM golang:1.14
+
+ENV GO111MODULE=on
+ENV GOFLAGS=-mod=vendor
+ENV APP_USER app
+ENV APP_HOME /go/src/email_action
+
+RUN go get -u github.com/beego/bee
+RUN groupadd $APP_USER && useradd -m -g $APP_USER -l $APP_USER
+RUN mkdir -p $APP_HOME
+
+USER root
+WORKDIR $APP_HOME
+COPY /. .
+
+RUN chown -R $APP_USER:$APP_USER $APP_HOME
+RUN go mod vendor
+
+EXPOSE 8080
+CMD ["bee", "run", "-runmode=prod"]

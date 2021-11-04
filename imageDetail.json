@@ -1,0 +1,6 @@
+[
+  {
+    "name": "email_action",
+    "imageUri": "300387167934.dkr.ecr.us-west-2.amazonaws.com/email_action:latest"
+  }
+]
